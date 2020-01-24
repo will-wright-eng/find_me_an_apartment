@@ -116,7 +116,7 @@ def search_craigslist():
     os.chdir(path)
     df.to_csv(csv_filename,index=False)
     os.chdir(cwd)
-    print(cwd)
+    #print(cwd)
     print('saved successfully')
     return ['/csvs/'+csv_filename,bar_chart_filename01,bar_chart_filename02], new_posts
 ###
@@ -154,7 +154,7 @@ def combine_craigslist_csvs():
     print('saving file...')
     df.to_csv(csv_filename,index=False)
     os.chdir(cwd)
-    print(cwd)
+    #print(cwd)
     print('saved successfully')
     return 
 ###
