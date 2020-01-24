@@ -33,9 +33,8 @@ import config
 # config.myemail # email string
 # config.recipients # list of strings
 
-cwd = os.getcwd()
-
 ###
+cwd = os.getcwd()
 
 def clean_craigslist_df(df):
     df = df.sort_values(by='script_timestamp',ascending=True)
@@ -54,7 +53,6 @@ def clean_craigslist_df(df):
     df['date_script_timestamp'] = pd.to_datetime(df['script_timestamp']).dt.date
     df['date_available'] = pd.to_datetime(df['available']+' 2020').dt.date
     df['days_till_available'] = df['date_available'].apply(lambda x: pd.to_datetime(x) - pd.to_datetime(dt.date.today()))
-    #df['currently_listed'] = df['date_script_timestamp'].apply(lambda x: dt.date.today()==x)
     return df
 ###
 
@@ -78,8 +76,6 @@ def make_bar_chart(df,col):
 
 def search_craigslist():
     print('start job...')
-    # today = str(dt.date.today())
-    #now = str(dt.datetime.now()).replace(' ','_').split('.')[0].replace(':','-')
     today = str(dt.date.today())
     csv_filename = today+'_craigslist_app_search_results.csv'
     cl_h = CraigslistHousing(site='sfbay', area='sfc',
@@ -91,7 +87,6 @@ def search_craigslist():
     dfs = []
     print('parsing results')
     for result in cl_h.get_results(sort_by='newest', geotagged=True, include_details=True):
-        #print(i)
         temp = pd.DataFrame(list(result.items())).T
         cols = list(temp.iloc[0])
         temp.columns = cols
@@ -105,27 +100,24 @@ def search_craigslist():
     df['script_timestamp'] = dt.datetime.now()
     df = clean_craigslist_df(df)
     ###
-    bar_chart_filename01 = '/images/'+make_bar_chart(df,'date_available')
-    bar_chart_filename02 = '/images/'+make_bar_chart(df,'date_posted')
+    bar_chart_filename01 = make_bar_chart(df,'date_available')
+    bar_chart_filename02 = make_bar_chart(df,'date_posted')
     new_posts = len(list(df.loc[df['date_posted']==dt.date.today()]['url']))
     new_posts = '\n\n'+str(new_posts)+' new posts today'#:\n\n'+'\n'.join(new_posts)
     ###
     print('saving file...')
-    #cwd = os.getcwd()
     path = cwd+'/csvs'
     os.chdir(path)
     df.to_csv(csv_filename,index=False)
     os.chdir(cwd)
-    #print(cwd)
     print('saved successfully')
-    return ['/csvs/'+csv_filename,bar_chart_filename01,bar_chart_filename02], new_posts
+    return ['/csvs/'+csv_filename,'/images/'+bar_chart_filename01,'/images/'+bar_chart_filename02], new_posts
 ###
 
 def combine_craigslist_csvs():
-    #cwd = os.getcwd()
     path = cwd+'/csvs'
     os.chdir(path)
-    
+    ###
     extension = 'csv'
     result = glob.glob('*.{}'.format(extension))
     csvs = [i for i in result if 'craigslist' in i]
@@ -134,11 +126,9 @@ def combine_craigslist_csvs():
         dfs.append(pd.read_csv(csv))
     ###
     df = pd.concat(dfs,sort=False)
-    
     # sort such that the most recent script instance is at the bottom
     df = df.sort_values(by='script_timestamp',ascending=True)
     print('concat csvs \t= ',len(df),' rows')
-    
     # keep only the last instance so that the most recent script timestamp is kept
     # datediff between listing and last timestamp can act as a proxy for post longevity
     df = df.drop_duplicates(subset='id',keep='last')
@@ -146,7 +136,6 @@ def combine_craigslist_csvs():
     df['date_script_timestamp'] = pd.to_datetime(df['script_timestamp']).dt.date
     df['currently_listed'] = df['date_script_timestamp'].apply(lambda x: dt.date.today()==x)
     ###
-    #now = str(dt.datetime.now()).replace(' ','_').split('.')[0].replace(':','-')
     today = str(dt.date.today())
     csv_filename = today+'_compiled_search_results.csv'
     df = clean_craigslist_df(df)
@@ -154,7 +143,6 @@ def combine_craigslist_csvs():
     print('saving file...')
     df.to_csv(csv_filename,index=False)
     os.chdir(cwd)
-    #print(cwd)
     print('saved successfully')
     return 
 ###
@@ -172,16 +160,13 @@ def mail(to, subject, text, attach):
     #get all the attachments
     for file in filenames:
         part = MIMEBase('application', 'octet-stream')
-        print(file)
         part.set_payload(open(cwd+file, 'rb').read())
         encoders.encode_base64(part)
         part.add_header('Content-Disposition', 'attachment; filename="%s"' % file)
         msg.attach(part)
     ###
     mailServer = smtplib.SMTP("smtp.gmail.com", 587)
-    mailServer.ehlo()
     mailServer.starttls()
-    mailServer.ehlo()
     mailServer.login(gmail_user, gmail_pwd)
     mailServer.sendmail(gmail_user, to, msg.as_string())
     # Should be mailServer.quit(), but that crashes...
@@ -191,7 +176,7 @@ def mail(to, subject, text, attach):
 print('\n','-'*6,'run search')
 search_result_filenames, new_posts = search_craigslist()
 print('\n','-'*6,'run csv aggregator')
-# combine_craigslist_csvs()
+combine_craigslist_csvs()
 
 ###
 print('\n','-'*6,'send email')
