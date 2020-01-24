@@ -6,6 +6,9 @@
 # https://github.com/juliomalegria/python-craigslist/blob/master/craigslist/craigslist.py
 # https://github.com/juliomalegria/python-craigslist/blob/master/craigslist/base.py
 
+# create two folders in directory: images & csvs
+# this will keep your saved files neatly organized
+
 import os
 import glob
 
@@ -29,6 +32,8 @@ import config
 # config.password # password string
 # config.myemail # email string
 # config.recipients # list of strings
+
+cwd = os.getcwd()
 
 ###
 
@@ -63,15 +68,20 @@ def make_bar_chart(df,col):
     ###
     today = str(dt.date.today())
     filename = today+'_count_listings_by_'+col+'.png'
+    path = cwd+'/images'
+    os.chdir(path)
     plt.savefig(filename,dpi=300)
+    os.chdir(cwd)
+    print(cwd)
     return filename
 ###
 
 def search_craigslist():
     print('start job...')
     # today = str(dt.date.today())
-    now = str(dt.datetime.now()).replace(' ','_').split('.')[0].replace(':','-')
-    csv_filename = now+'_craigslist_app_search_results.csv'
+    #now = str(dt.datetime.now()).replace(' ','_').split('.')[0].replace(':','-')
+    today = str(dt.date.today())
+    csv_filename = today+'_craigslist_app_search_results.csv'
     cl_h = CraigslistHousing(site='sfbay', area='sfc',
                              filters={'min_price': 3000, 'max_price': 7000, 
                                       'search_distance': 4, 'zip_code': 94133,
@@ -79,6 +89,7 @@ def search_craigslist():
     ###
     i = 0
     dfs = []
+    print('parsing results')
     for result in cl_h.get_results(sort_by='newest', geotagged=True, include_details=True):
         #print(i)
         temp = pd.DataFrame(list(result.items())).T
@@ -94,18 +105,27 @@ def search_craigslist():
     df['script_timestamp'] = dt.datetime.now()
     df = clean_craigslist_df(df)
     ###
-    bar_chart_filename01 = make_bar_chart(df,'date_available')
-    bar_chart_filename02 = make_bar_chart(df,'date_posted')
+    bar_chart_filename01 = '/images/'+make_bar_chart(df,'date_available')
+    bar_chart_filename02 = '/images/'+make_bar_chart(df,'date_posted')
     new_posts = len(list(df.loc[df['date_posted']==dt.date.today()]['url']))
     new_posts = '\n\n'+str(new_posts)+' new posts today'#:\n\n'+'\n'.join(new_posts)
     ###
     print('saving file...')
+    #cwd = os.getcwd()
+    path = cwd+'/csvs'
+    os.chdir(path)
     df.to_csv(csv_filename,index=False)
+    os.chdir(cwd)
+    #print(cwd)
     print('saved successfully')
-    return [csv_filename,bar_chart_filename01,bar_chart_filename02], new_posts
+    return ['/csvs/'+csv_filename,bar_chart_filename01,bar_chart_filename02], new_posts
 ###
 
 def combine_craigslist_csvs():
+    #cwd = os.getcwd()
+    path = cwd+'/csvs'
+    os.chdir(path)
+    
     extension = 'csv'
     result = glob.glob('*.{}'.format(extension))
     csvs = [i for i in result if 'craigslist' in i]
@@ -126,12 +146,15 @@ def combine_craigslist_csvs():
     df['date_script_timestamp'] = pd.to_datetime(df['script_timestamp']).dt.date
     df['currently_listed'] = df['date_script_timestamp'].apply(lambda x: dt.date.today()==x)
     ###
-    now = str(dt.datetime.now()).replace(' ','_').split('.')[0].replace(':','-')
-    filename = now+'_compiled_search_results.csv'
+    #now = str(dt.datetime.now()).replace(' ','_').split('.')[0].replace(':','-')
+    today = str(dt.date.today())
+    csv_filename = today+'_compiled_search_results.csv'
     df = clean_craigslist_df(df)
     ###
     print('saving file...')
-    df.to_csv(filename,index=False)
+    df.to_csv(csv_filename,index=False)
+    os.chdir(cwd)
+    #print(cwd)
     print('saved successfully')
     return 
 ###
@@ -149,7 +172,8 @@ def mail(to, subject, text, attach):
     #get all the attachments
     for file in filenames:
         part = MIMEBase('application', 'octet-stream')
-        part.set_payload(open(file, 'rb').read())
+        print(file)
+        part.set_payload(open(cwd+file, 'rb').read())
         encoders.encode_base64(part)
         part.add_header('Content-Disposition', 'attachment; filename="%s"' % file)
         msg.attach(part)
@@ -167,7 +191,7 @@ def mail(to, subject, text, attach):
 print('\n','-'*6,'run search')
 search_result_filenames, new_posts = search_craigslist()
 print('\n','-'*6,'run csv aggregator')
-combine_craigslist_csvs()
+# combine_craigslist_csvs()
 
 ###
 print('\n','-'*6,'send email')
