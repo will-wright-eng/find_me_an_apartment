@@ -79,7 +79,6 @@ def make_bar_chart(df,col):
     os.chdir(path)
     plt.savefig(filename,dpi=300)
     os.chdir(cwd)
-    print(cwd)
     return filename
 ###
 
@@ -127,7 +126,6 @@ def search_craigslist():
     print('saving file...')
     path = cwd+'/csvs'
     os.chdir(path)
-    print(csv_filename)
     df.to_csv(csv_filename,index=False)
     os.chdir(cwd)
     print('saved successfully')
@@ -197,9 +195,6 @@ print('\n','-'*6,'run search')
 search_result_filenames, new_posts = search_craigslist()
 print('\n','-'*6,'run csv aggregator')
 combine_craigslist_csvs()
-
-# def string_of_april
-
 
 ###
 print('\n','-'*6,'send email')
