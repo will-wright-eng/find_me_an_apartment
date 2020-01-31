@@ -32,9 +32,18 @@ import config
 # config.password # password string
 # config.myemail # email string
 # config.recipients # list of strings
+# config.recipients_test # single element list (which is a string)
 
 ###
 cwd = os.getcwd()
+
+input1 = input('Testing python script? (y/n)\n') 
+if input1=='y':
+    print('\ntesting...')
+    recipients = config.recipients_test
+else:
+    print('\nfull email list used')
+    recipients = config.recipients
 
 def clean_craigslist_df(df):
     df = df.sort_values(by='script_timestamp',ascending=True)
@@ -102,12 +111,23 @@ def search_craigslist():
     ###
     bar_chart_filename01 = make_bar_chart(df,'date_available')
     bar_chart_filename02 = make_bar_chart(df,'date_posted')
-    new_posts = len(list(df.loc[df['date_posted']==dt.date.today()]['url']))
-    new_posts = '\n\n'+str(new_posts)+' new posts today'#:\n\n'+'\n'.join(new_posts)
+    ###
+    df['date_available'] = pd.to_datetime(df['date_available'])
+    ndf = df.loc[pd.isnull(df['available'])==False]
+    start_date = '2020-03-15'
+    stop_date = '2020-05-15'
+    ndf0 = ndf.loc[ndf['date_available']>pd.to_datetime(start_date)]
+    ndf0 = ndf0.loc[ndf0['date_available']<pd.to_datetime(stop_date)]
+    new_post_links = list(ndf0['url'])
+    new_post_links = 'Posts with availability between '+start_date+' and '+stop_date+':\n'+' \n'.join(new_post_links)
+    num_new_posts = len(list(df.loc[df['date_posted']==dt.date.today()]['url']))
+    new_posts = new_post_links+'\n\n'+str(num_new_posts)+' new posts today\n\n'
+
     ###
     print('saving file...')
     path = cwd+'/csvs'
     os.chdir(path)
+    print(csv_filename)
     df.to_csv(csv_filename,index=False)
     os.chdir(cwd)
     print('saved successfully')
@@ -178,12 +198,17 @@ search_result_filenames, new_posts = search_craigslist()
 print('\n','-'*6,'run csv aggregator')
 combine_craigslist_csvs()
 
+# def string_of_april
+
+
 ###
 print('\n','-'*6,'send email')
 today = str(dt.date.today())
-recipients = config.recipients
-mail(recipients,
-    today+" Craigslist Search Results",
-    "Testing automated email for Craigslist search results. For search parameters see: \n https://sfbay.craigslist.org/search/sfc/apa?search_distance=4&postal=94133&min_price=4000&max_price=7000&min_bedrooms=3&availabilityMode=0&sale_date=all+dates"+new_posts+' (not sure if this number is correct)',
-    search_result_filenames)
-print('program successful!')
+to = recipients
+subject = today+" Craigslist Search Results"
+text = new_posts+'Craigslist search parameters: \nhttps://sfbay.craigslist.org/search/sfc/apa?search_distance=4&postal=94133&min_price=4000&max_price=7000&min_bedrooms=3&availabilityMode=0&sale_date=all+dates\nCode: \nhttps://github.com/william-cass-wright/find_me_an_appartment/blob/master/craigslist_extract_and_email.py'
+attach = search_result_filenames
+mail(to, subject, text, attach)
+###
+print(text,'\n')
+print('program successful!\n')
