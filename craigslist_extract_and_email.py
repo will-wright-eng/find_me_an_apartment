@@ -11,6 +11,7 @@
 
 import os
 import glob
+import sys
 
 import pandas as pd
 from craigslist import CraigslistHousing
@@ -41,9 +42,12 @@ input1 = input('Testing python script? (y/n)\n')
 if input1=='y':
     print('\ntesting...')
     recipients = config.recipients_test
-else:
+elif input1=='n':
     print('\nfull email list used')
     recipients = config.recipients
+else:
+    print('\nnot a valid answer')
+    sys.exit()
 
 def clean_craigslist_df(df):
     df = df.sort_values(by='script_timestamp',ascending=True)
@@ -65,16 +69,20 @@ def clean_craigslist_df(df):
     return df
 ###
 
-def make_bar_chart(df,col):
+def make_bar_chart(df,col,title_append=''):
     ndf = pd.DataFrame(df[col].value_counts()).reset_index().sort_values(by='index')
     ndf = ndf.set_index('index')
     ndf.plot(kind='bar',figsize=(10,4))
     plt.xticks(rotation=90)
-    plt.title('number of listings by '+col)
+    plt.title('number of listings by '+col+' ['+title_append+']')
     plt.tight_layout()
     ###
     today = str(dt.date.today())
-    filename = today+'_count_listings_by_'+col+'.png'
+    if len(title_append)>0:
+        title_append = title_append.replace(' ','_')
+        filename = today+'_count_listings_by_'+col+'_'+title_append+'.png'
+    else:
+        filename = today+'_count_listings_by_'+col+'.png'
     path = cwd+'/images'
     os.chdir(path)
     plt.savefig(filename,dpi=300)
@@ -89,7 +97,7 @@ def search_craigslist():
     cl_h = CraigslistHousing(site='sfbay', area='sfc',
                              filters={'min_price': 3000, 'max_price': 7000, 
                                       'search_distance': 4, 'zip_code': 94133,
-                                      'min_bedrooms':3})
+                                      'min_bedrooms':3, 'max_bedrooms':3})
     ###
     i = 0
     dfs = []
@@ -112,16 +120,21 @@ def search_craigslist():
     bar_chart_filename02 = make_bar_chart(df,'date_posted')
     ###
     df['date_available'] = pd.to_datetime(df['date_available'])
+    df['bedrooms'] = df['bedrooms'].astype(int)
     ndf = df.loc[pd.isnull(df['available'])==False]
+    print(len(ndf))
     start_date = '2020-03-15'
-    stop_date = '2020-05-15'
+    stop_date = '2020-04-15'
     ndf0 = ndf.loc[ndf['date_available']>pd.to_datetime(start_date)]
     ndf0 = ndf0.loc[ndf0['date_available']<pd.to_datetime(stop_date)]
+    print(len(ndf0))
+    ndf0 = ndf0.loc[ndf0['bedrooms']==3]
+    print(len(ndf0))
     new_post_links = list(ndf0['url'])
-    new_post_links = 'Posts with availability between '+start_date+' and '+stop_date+':\n'+' \n'.join(new_post_links)
     num_new_posts = len(list(df.loc[df['date_posted']==dt.date.today()]['url']))
-    new_posts = new_post_links+'\n\n'+str(num_new_posts)+' new posts today\n\n'
-
+    new_post_links = str(len(df))+' total posts collected\n'+str(num_new_posts)+' new posts today\n\n'+'Posts availabile between '+start_date+' and '+stop_date+' with 3 bedrooms:\n'+' \n'.join(new_post_links)
+    new_posts = new_post_links#+'\n\n'+str(num_new_posts)+' new posts today\n\n'
+    #bar_chart_filename03 = make_bar_chart(ndf0,'date_available','select apts')
     ###
     print('saving file...')
     path = cwd+'/csvs'
@@ -130,6 +143,7 @@ def search_craigslist():
     os.chdir(cwd)
     print('saved successfully')
     return ['/csvs/'+csv_filename,'/images/'+bar_chart_filename01,'/images/'+bar_chart_filename02], new_posts
+    
 ###
 
 def combine_craigslist_csvs():
