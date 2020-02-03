@@ -176,6 +176,7 @@ def combine_craigslist_csvs():
     df.to_csv(csv_filename,index=False)
     os.chdir(cwd)
     print('saved successfully')
+    make_bar_chart(df,'date_available','combined csv')
     return 
 ###
 
@@ -215,7 +216,7 @@ print('\n','-'*6,'send email')
 today = str(dt.date.today())
 to = recipients
 subject = today+" Craigslist Search Results"
-text = new_posts+'Craigslist search parameters: \nhttps://sfbay.craigslist.org/search/sfc/apa?search_distance=4&postal=94133&min_price=4000&max_price=7000&min_bedrooms=3&availabilityMode=0&sale_date=all+dates\nCode: \nhttps://github.com/william-cass-wright/find_me_an_appartment/blob/master/craigslist_extract_and_email.py'
+text = new_posts+' \n\n Craigslist search parameters: \nhttps://sfbay.craigslist.org/search/sfc/apa?search_distance=4&postal=94133&min_price=4000&max_price=7000&min_bedrooms=3&availabilityMode=0&sale_date=all+dates\nCode: \nhttps://github.com/william-cass-wright/find_me_an_appartment/blob/master/craigslist_extract_and_email.py'
 attach = search_result_filenames
 mail(to, subject, text, attach)
 ###
