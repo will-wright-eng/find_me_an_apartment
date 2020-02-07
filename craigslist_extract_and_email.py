@@ -38,13 +38,16 @@ import config
 ###
 cwd = os.getcwd()
 
-input1 = input('Testing python script? (y/n)\n') 
+input1 = input('Testing python script? (y/n/m)\n') 
 if input1=='y':
     print('\ntesting...')
     recipients = config.recipients_test
 elif input1=='n':
     print('\nfull email list used')
     recipients = config.recipients
+elif input1=='m':
+    print('\ncontacting the messiah of entropy')
+    recipients = config.meena
 else:
     print('\nnot a valid answer')
     sys.exit()
@@ -216,7 +219,7 @@ print('\n','-'*6,'send email')
 today = str(dt.date.today())
 to = recipients
 subject = today+" Craigslist Search Results"
-text = new_posts+' \n\nCraigslist search parameters: \n https://sfbay.craigslist.org/search/sfc/apa?search_distance=4&postal=94133&min_price=4000&max_price=7500&min_bedrooms=3&availabilityMode=0&sale_date=all+dates \nCode: \n https://github.com/william-cass-wright/find_me_an_appartment/blob/master/craigslist_extract_and_email.py'
+text = new_posts+' \n\n\n\nCraigslist search parameters: \n https://sfbay.craigslist.org/search/sfc/apa?search_distance=4&postal=94133&min_price=4000&max_price=7500&min_bedrooms=3&availabilityMode=0&sale_date=all+dates \nCode: \n https://github.com/william-cass-wright/find_me_an_appartment/blob/master/craigslist_extract_and_email.py'
 attach = search_result_filenames
 mail(to, subject, text, attach)
 ###
