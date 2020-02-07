@@ -95,7 +95,7 @@ def search_craigslist():
     today = str(dt.date.today())
     csv_filename = today+'_craigslist_app_search_results.csv'
     cl_h = CraigslistHousing(site='sfbay', area='sfc',
-                             filters={'min_price': 3000, 'max_price': 7000, 
+                             filters={'min_price': 4000, 'max_price': 7500, 
                                       'search_distance': 4, 'zip_code': 94133,
                                       'min_bedrooms':3, 'max_bedrooms':3})
     ###
@@ -123,8 +123,8 @@ def search_craigslist():
     df['bedrooms'] = df['bedrooms'].astype(int)
     ndf = df.loc[pd.isnull(df['available'])==False]
     print(len(ndf))
-    start_date = '2020-03-15'
-    stop_date = '2020-04-15'
+    start_date = '2020-03-14'
+    stop_date = '2020-04-16'
     ndf0 = ndf.loc[ndf['date_available']>pd.to_datetime(start_date)]
     ndf0 = ndf0.loc[ndf0['date_available']<pd.to_datetime(stop_date)]
     print(len(ndf0))
@@ -132,7 +132,7 @@ def search_craigslist():
     print(len(ndf0))
     new_post_links = list(ndf0['url'])
     num_new_posts = len(list(df.loc[df['date_posted']==dt.date.today()]['url']))
-    new_post_links = str(len(df))+' total posts collected\n'+str(num_new_posts)+' new posts today\n\n'+'Posts availabile between '+start_date+' and '+stop_date+' with 3 bedrooms:\n'+' \n'.join(new_post_links)
+    new_post_links = str(len(df))+' total posts collected\n'+str(num_new_posts)+' new posts today\n\n'+'Posts availabile between '+start_date+' and '+stop_date+' with 3 bedrooms: \n\n'+' \n\n'.join(new_post_links)
     new_posts = new_post_links#+'\n\n'+str(num_new_posts)+' new posts today\n\n'
     #bar_chart_filename03 = make_bar_chart(ndf0,'date_available','select apts')
     ###
@@ -216,7 +216,7 @@ print('\n','-'*6,'send email')
 today = str(dt.date.today())
 to = recipients
 subject = today+" Craigslist Search Results"
-text = new_posts+' \n\n Craigslist search parameters: \nhttps://sfbay.craigslist.org/search/sfc/apa?search_distance=4&postal=94133&min_price=4000&max_price=7000&min_bedrooms=3&availabilityMode=0&sale_date=all+dates\nCode: \nhttps://github.com/william-cass-wright/find_me_an_appartment/blob/master/craigslist_extract_and_email.py'
+text = new_posts+' \n\nCraigslist search parameters: \n https://sfbay.craigslist.org/search/sfc/apa?search_distance=4&postal=94133&min_price=4000&max_price=7500&min_bedrooms=3&availabilityMode=0&sale_date=all+dates \nCode: \n https://github.com/william-cass-wright/find_me_an_appartment/blob/master/craigslist_extract_and_email.py'
 attach = search_result_filenames
 mail(to, subject, text, attach)
 ###
