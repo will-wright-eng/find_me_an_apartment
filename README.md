@@ -12,8 +12,8 @@ This module includes:
 Analysis included the images sent out in every email along with a Tableau dashboard
 
 ### Sample of email images
-![sample1](https://github.com/william-cass-wright/find_me_an_appartment/images/2020-03-04_count_listings_by_date_available_combined_csv.png)
-![sample2](https://github.com/william-cass-wright/find_me_an_appartment/images/2020-03-04_count_listings_by_date_available.png)
+![sample1](https://github.com/william-cass-wright/find_me_an_apartment/blob/master/images/2020-03-04_count_listings_by_date_available_combined_csv.png)
+![sample2](https://github.com/william-cass-wright/find_me_an_apartment/blob/master/images/2020-03-04_count_listings_by_date_available.png)
 
 ### Tableau dashboard snapshot
 ![tableau1](https://github.com/william-cass-wright/find_me_an_appartment/images/tableau1.png)
