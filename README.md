@@ -1,4 +1,6 @@
-# This project was devised to better understand the rental market in SF. I manually ran this program on a daily (ish) basis from 2020-01-15 till 2020-03-20, prior to my search for a new apartment. 
+# Find Me An Apartment
+
+This project was devised to better understand the rental market in SF. I manually ran this program on a daily (ish) basis from 2020-01-15 till 2020-03-20, prior to my search for a new apartment. 
 
 ## craigslist_extract_and_email
 This module includes:
@@ -10,7 +12,7 @@ This module includes:
 Analysis included the images sent out in every email along with a Tableau dashboard
 
 # Sample of email images
-![alt text](https://github.com/william-cass-wright/find_me_an_appartment/blob/[branch]/image.jpg?raw=true)
+![alt text](https://github.com/william-cass-wright/find_me_an_appartment/image.jpg?raw=true)
 
 # Tableau dashboard snapshot
 
