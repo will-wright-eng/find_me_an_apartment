@@ -1,21 +1,16 @@
-# https://pypi.org/project/python-craigslist/
-# https://github.com/juliomalegria/python-craigslist/blob/master/craigslist/craigslist.py
-# https://github.com/juliomalegria/python-craigslist/blob/master/craigslist/base.py
-
-# https://pypi.org/project/python-craigslist/
-# https://github.com/juliomalegria/python-craigslist/blob/master/craigslist/craigslist.py
-# https://github.com/juliomalegria/python-craigslist/blob/master/craigslist/base.py
-
-# create two folders in directory: images & csvs
-# this will keep your saved files neatly organized
+'''
+1. create two folders in directory (images & csvs) for the script to organize data collection
+2. setup config file for email credentials and recipient lists
+'''
 
 import os
 import glob
 import sys
-
 import pandas as pd
-from craigslist import CraigslistHousing
 import datetime as dt
+import matplotlib
+import matplotlib.pyplot as plt
+import pandas as pd
 
 import smtplib
 from email.mime.base import MIMEBase
@@ -24,9 +19,7 @@ from email.message import Message
 from email.mime.text import MIMEText
 from email import encoders
 
-import matplotlib
-import matplotlib.pyplot as plt
-import pandas as pd
+from craigslist import CraigslistHousing
 
 # import credentials from separate file
 import config
@@ -35,24 +28,9 @@ import config
 # config.recipients # list of strings
 # config.recipients_test # single element list (which is a string)
 
-###
-cwd = os.getcwd()
-
-input1 = input('Testing python script? (y/n/m)\n') 
-if input1=='y':
-    print('\ntesting...')
-    recipients = config.recipients_test
-elif input1=='n':
-    print('\nfull email list used')
-    recipients = config.recipients
-elif input1=='m':
-    print('\ncontacting the messiah of entropy')
-    recipients = config.meena
-else:
-    print('\nnot a valid answer')
-    sys.exit()
 
 def clean_craigslist_df(df):
+    '''docstring for clean_craigslist_df'''
     df = df.sort_values(by='script_timestamp',ascending=True)
     df = df[[i for i in list(df) if 'Unnamed' not in i]]
     ###
@@ -70,9 +48,9 @@ def clean_craigslist_df(df):
     df['date_available'] = pd.to_datetime(df['available']+' 2020').dt.date
     df['days_till_available'] = df['date_available'].apply(lambda x: pd.to_datetime(x) - pd.to_datetime(dt.date.today()))
     return df
-###
 
 def make_bar_chart(df,col,title_append=''):
+    '''docstring for make_bar_chart'''
     ndf = pd.DataFrame(df[col].value_counts()).reset_index().sort_values(by='index')
     ndf = ndf.set_index('index')
     ndf.plot(kind='bar',figsize=(10,4))
@@ -91,9 +69,9 @@ def make_bar_chart(df,col,title_append=''):
     plt.savefig(filename,dpi=300)
     os.chdir(cwd)
     return filename
-###
 
 def search_craigslist():
+    '''docstring for search_craigslist'''
     print('start job...')
     today = str(dt.date.today())
     csv_filename = today+'_craigslist_app_search_results.csv'
@@ -146,10 +124,9 @@ def search_craigslist():
     os.chdir(cwd)
     print('saved successfully')
     return ['/csvs/'+csv_filename,'/images/'+bar_chart_filename01,'/images/'+bar_chart_filename02], new_posts
-    
-###
 
 def combine_craigslist_csvs():
+    '''docstring for combine_craigslist_csvs'''
     path = cwd+'/csvs'
     os.chdir(path)
     ###
@@ -180,10 +157,10 @@ def combine_craigslist_csvs():
     os.chdir(cwd)
     print('saved successfully')
     make_bar_chart(df,'date_available','combined csv')
-    return 
-###
+    return
 
 def mail(to, subject, text, attach):
+    '''docstring for mail'''
     filenames = attach
     gmail_user = config.myemail
     gmail_pwd = config.password
@@ -208,20 +185,39 @@ def mail(to, subject, text, attach):
     # Should be mailServer.quit(), but that crashes...
     return mailServer.close()
 
-###
-print('\n','-'*6,'run search')
-search_result_filenames, new_posts = search_craigslist()
-print('\n','-'*6,'run csv aggregator')
-combine_craigslist_csvs()
+def main():
+    '''docstring for main'''
+    cwd = os.getcwd()
+    input1 = input('Testing python script? (y/n/m)\n') 
+    if input1=='y':
+        print('\ntesting...')
+        recipients = config.recipients_test
+    elif input1=='n':
+        print('\nfull email list used')
+        recipients = config.recipients
+    elif input1=='m':
+        print('\ncontacting the messiah of entropy')
+        recipients = config.meena
+    else:
+        print('\nnot a valid answer')
+        sys.exit()
+    ###
+    print('\n','-'*6,'run search')
+    search_result_filenames, new_posts = search_craigslist()
+    print('\n','-'*6,'run csv aggregator')
+    combine_craigslist_csvs()
+    ###
+    print('\n','-'*6,'send email')
+    today = str(dt.date.today())
+    to = recipients
+    subject = today+" Craigslist Search Results"
+    text = new_posts+' \n\n\n\nCraigslist search parameters: \n https://sfbay.craigslist.org/search/sfc/apa?search_distance=4&postal=94133&min_price=4000&max_price=7500&min_bedrooms=3&availabilityMode=0&sale_date=all+dates \nCode: \n https://github.com/william-cass-wright/find_me_an_appartment/blob/master/craigslist_extract_and_email.py'
+    attach = search_result_filenames
+    mail(to, subject, text, attach)
+    ###
+    print(text,'\n')
+    return 
 
-###
-print('\n','-'*6,'send email')
-today = str(dt.date.today())
-to = recipients
-subject = today+" Craigslist Search Results"
-text = new_posts+' \n\n\n\nCraigslist search parameters: \n https://sfbay.craigslist.org/search/sfc/apa?search_distance=4&postal=94133&min_price=4000&max_price=7500&min_bedrooms=3&availabilityMode=0&sale_date=all+dates \nCode: \n https://github.com/william-cass-wright/find_me_an_appartment/blob/master/craigslist_extract_and_email.py'
-attach = search_result_filenames
-mail(to, subject, text, attach)
-###
-print(text,'\n')
-print('program successful!\n')
+if __name__ == '__main__':
+    main()
+    print('program successful!\n')
