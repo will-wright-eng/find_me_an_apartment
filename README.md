@@ -16,9 +16,9 @@ Analysis included the images sent out in every email along with a Tableau dashbo
 ![sample2](https://github.com/william-cass-wright/find_me_an_apartment/blob/master/images/2020-03-04_count_listings_by_date_available.png)
 
 ### Tableau dashboard snapshot
-![tableau1](https://github.com/william-cass-wright/find_me_an_appartment/images/tableau1.png)
-![tableau2](https://github.com/william-cass-wright/find_me_an_appartment/images/tableau2.png)
-![tableau3](https://github.com/william-cass-wright/find_me_an_appartment/images/tableau3.png)
+![tableau1](https://github.com/william-cass-wright/find_me_an_apartment/blob/master/images/tableau1.png)
+![tableau2](https://github.com/william-cass-wright/find_me_an_apartment/blob/master/images/tableau2.png)
+![tableau3](https://github.com/william-cass-wright/find_me_an_apartment/blob/master/images/tableau3.png)
 
 ## Analysis
 An interesting observation is that about 80% of posts are automatically re-posted every day for visability -- filtering out these reposts as noise allowed for me to identify the more desirable apartments. 
