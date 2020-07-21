@@ -12,13 +12,13 @@ This module includes:
 Analysis included the images sent out in every email along with a Tableau dashboard
 
 ### Sample of email images
-![alt text](https://github.com/william-cass-wright/find_me_an_appartment/2020-03-04_count_listings_by_date_available_combined_csv.png?raw=true)
-![alt text](https://github.com/william-cass-wright/find_me_an_appartment/2020-03-04_count_listings_by_date_available.png?raw=true)
+![sample1](https://github.com/william-cass-wright/find_me_an_appartment/images/2020-03-04_count_listings_by_date_available_combined_csv.png?raw=true)
+![sample2](https://github.com/william-cass-wright/find_me_an_appartment/images/2020-03-04_count_listings_by_date_available.png?raw=true)
 
 ### Tableau dashboard snapshot
-![alt text](https://github.com/william-cass-wright/find_me_an_appartment/tableau1.png?raw=true)
-![alt text](https://github.com/william-cass-wright/find_me_an_appartment/tableau2.png?raw=true)
-![alt text](https://github.com/william-cass-wright/find_me_an_appartment/tableau3.png?raw=true)
+![tableau1](https://github.com/william-cass-wright/find_me_an_appartment/images/tableau1.png?raw=true)
+![tableau2](https://github.com/william-cass-wright/find_me_an_appartment/images/tableau2.png?raw=true)
+![tableau3](https://github.com/william-cass-wright/find_me_an_appartment/images/tableau3.png?raw=true)
 
 ## Analysis
 An interesting observation is that about 80% of posts are automatically re-posted every day for visability -- filtering out these reposts as noise allowed for me to identify the more desirable apartments. 
