@@ -34,11 +34,15 @@ An interesting observation is that about 80% of posts are automatically re-poste
 ### Need
 - add logging in place of print statements
 - save snapshot tables as parquet to S3
+- replace input with standard recipient list
+- make sure send_email method can handle w/ and w/o image attachments
 
 ### Want
 - parameterize craigslist search
+- develop report into more formal pdf (incorporate Tableau dashboard if possible)
 
 ### Nice to have
 - Airflow DAG to automate data collection
 - simple UI
+- managed recipient list (Google Group) that's pulled from 
 
