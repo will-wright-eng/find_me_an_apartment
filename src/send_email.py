@@ -4,6 +4,8 @@ email module
 Author: William Wright
 '''
 
+import config
+
 def mail(to, subject, text, attach):
     '''docstring for mail'''
     filenames = attach
