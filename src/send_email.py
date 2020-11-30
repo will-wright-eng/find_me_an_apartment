@@ -4,9 +4,18 @@ email module
 Author: William Wright
 '''
 
+import smtplib
+
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.message import Message
+from email.mime.text import MIMEText
+from email import encoders
+
 import config
 
-def mail(to, subject, text, attach):
+
+def mail(email_to, subject, text, attach):
     '''docstring for mail'''
     filenames = attach
     gmail_user = config.myemail
@@ -29,6 +38,6 @@ def mail(to, subject, text, attach):
     mailServer = smtplib.SMTP("smtp.gmail.com", 587)
     mailServer.starttls()
     mailServer.login(gmail_user, gmail_pwd)
-    mailServer.sendmail(gmail_user, to, msg.as_string())
+    mailServer.sendmail(gmail_user, email_to, msg.as_string())
     # Should be mailServer.quit(), but that crashes...
     return mailServer.close()
