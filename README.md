@@ -7,6 +7,34 @@ This project was devised to better understand the rental market in SF. I manuall
 - data handling
 - smtp email
 
+## Directory
+
+```bash
+.
+├── README.md
+├── images
+│   ├── 2020-03-04_count_listings_by_date_available.png
+│   ├── 2020-03-04_count_listings_by_date_available_combined_csv.png
+│   ├── tableau1.png
+│   ├── tableau2.png
+│   └── tableau3.png
+├── src
+│   ├── dag_clist.py
+│   ├── main_clist.py
+│   ├── main_email.py
+│   ├── module_clist
+│   │   ├── __init__.py
+│   │   └── collect_clist.py
+│   ├── module_email
+│   │   ├── __init__.py
+│   │   ├── email_config.py
+│   │   └── send_email.py
+│   └── module_utils
+│       ├── __init__.py
+│       ├── function_logger.py
+│       └── s3_funks.py
+```
+
 ## Results
 Analysis included the images sent out in every email along with a Tableau dashboard
 
