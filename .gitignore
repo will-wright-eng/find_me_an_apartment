@@ -1,6 +1,7 @@
 *.py[cod]
 *.xlsx
 *.gz
+*.log
 
 *.ipynb_checkpoints
 *.ipynb
@@ -10,6 +11,7 @@ __pycache__/
 Untitled*
 tmp*
 notes*
+*config.py
 
-config.py
 project_dev/
+src/results/
