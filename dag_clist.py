@@ -49,13 +49,13 @@ start_dag = BashOperator(
 clist = BashOperator(
     task_id='clist',
     bash_command='''echo "collect craigslist listings"
-        python main_clist.py''',
+        python src/main_clist.py''',
     dag=dag,
 )
 email = BashOperator(
     task_id='print_date',
     bash_command='''echo "sending email"
-        python main_email.py''',
+        python src/main_email.py''',
     dag=dag,
 )
 
