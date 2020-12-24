@@ -33,7 +33,8 @@ def collect_clist_data():
     for result in cl_h.get_results(sort_by='newest',
                                    geotagged=True,
                                    include_details=True):
-        logger.info('get results for row '+str(i))
+        if i%50 ==0:
+            logger.info('get results for row '+str(i))
         temp = pd.DataFrame(list(result.items())).T
         cols = list(temp.iloc[0])
         temp.columns = cols

@@ -1,15 +1,23 @@
 # Find Me An Apartment
 
+## Table of Contents
+
+- Summary
+- Tree
+- Results
+- To Do
+
+## Summary
+
 The first pass at this project was a crude python script that looped over the CraigslistHousing generator, converted results to a pandas dataframe, then send out an email. I manually ran this program on a daily-ish basis from 2020-01-15 till 2020-03-20, prior to my search for a new apartment. 
 
 The second iteration on the project is deploying a reworked version to airflow, which runs on a daily basis.
 
-## Summary
 - craigslist search ([github](https://github.com/juliomalegria/python-craigslist))
-- data handling
+- data handling (pandas)
 - smtp email ([docs](https://docs.python.org/3/library/smtplib.html))
 
-## Directory
+## Tree
 
 ```bash
 .
@@ -62,16 +70,16 @@ An interesting observation is that about 80% of posts are automatically re-poste
 
 ## To Do
 ### Need
-- ~~add logging in place of print statements~~
-- ~~save snapshot tables as ~~parquet~~ csv to S3~~
 - add CI (Travis or Jenkins)
+- Airflow DAG to automate data collection
+- ~~add logging in place of print statements~~
+- ~~save snapshot tables as ~~parquet~~ __csv__ to S3~~
 
 ### Want
-- make sure send_email method can handle w/ and w/o image attachments
 - parameterize craigslist search
 - develop report into more formal pdf (incorporate Tableau dashboard if possible)
+- ~~make sure send_email method can handle w/ and w/o image attachments~~
 
 ### Nice to have
-- Airflow DAG to automate data collection
 - simple UI
 - managed recipient list (Google Group)
