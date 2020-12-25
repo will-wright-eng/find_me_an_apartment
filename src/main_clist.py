@@ -18,9 +18,12 @@ import module_utils.s3_funks as s3_funks
 
 my_str = str(dt.datetime.today())
 chars = re.escape(string.punctuation)
-today = re.sub(r'['+chars+']', '',my_str).replace(' ','_')
+today = re.sub(r'[' + chars + ']', '', my_str).replace(' ', '_')
 
-logger = fl.function_logger(logging.DEBUG, logging.DEBUG, function_name='test_dag')
+logger = fl.function_logger(logging.DEBUG,
+                            logging.DEBUG,
+                            function_name='test_dag')
+
 
 def collect_clist_data():
     '''docstring for collect_clist_data'''
@@ -40,8 +43,8 @@ def collect_clist_data():
     for result in cl_h.get_results(sort_by='newest',
                                    geotagged=True,
                                    include_details=True):
-        if i%50 ==0:
-            logger.info('get results for row '+str(i))
+        if i % 50 == 0:
+            logger.info('get results for row ' + str(i))
         temp = pd.DataFrame(list(result.items())).T
         cols = list(temp.iloc[0])
         temp.columns = cols
@@ -57,13 +60,15 @@ def collect_clist_data():
     ndf = search_cl.clean_clist_df(df)
     return ndf
 
+
 def main():
     '''docstring for main'''
     df = collect_clist_data()
-    filename = today+'_clistings.csv'
-    keyname = "craigslist-tables/"+filename
+    filename = today + '_clistings.csv'
+    keyname = "craigslist-tables/" + filename
     bucket = "project-rac"
     s3_funks.write_df_to_s3(df, bucket, keyname)
+
 
 if __name__ == '__main__':
     main()
