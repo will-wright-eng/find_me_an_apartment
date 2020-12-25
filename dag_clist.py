@@ -1,13 +1,13 @@
+'''py file docstring
+Author: William Wright
+'''
+
 from datetime import timedelta
 
-# The DAG object; we'll need this to instantiate a DAG
 from airflow import DAG
 
-# Operators; we need this to operate!
 from airflow.operators.bash_operator import BashOperator
 from airflow.utils.dates import days_ago
-# These args will get passed on to each operator
-# You can override them on a per-task basis during operator initialization
 
 default_args = {
     'owner': 'willcasswrig',
@@ -19,13 +19,11 @@ default_args = {
     'retry_delay': timedelta(minutes=1),
 }
 
-dag = DAG(
-    'dag_clist',
-    default_args=default_args,
-    description='grabs craigslist rental listings',
-    schedule_interval='0 */12 * * *',
-    start_date=days_ago(1)
-)
+dag = DAG('dag_clist',
+          default_args=default_args,
+          description='grabs craigslist rental listings',
+          schedule_interval='0 */12 * * *',
+          start_date=days_ago(1))
 
 start_dag = BashOperator(
     task_id='print_date',
