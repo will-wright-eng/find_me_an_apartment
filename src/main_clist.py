@@ -3,20 +3,27 @@ Author: William Wright
 '''
 
 import os
+import re
+import string
 import datetime as dt
-import pandas as pd
 import logging
 import inspect
 
+import pandas as pd
 from craigslist import CraigslistHousing
+
 import module_utils.function_logger as fl
 import module_clist.collect_clist as search_cl
 import module_utils.s3_funks as s3_funks
 
-today = str(dt.date.today())
+my_str = str(dt.datetime.today())
+chars = re.escape(string.punctuation)
+today = re.sub(r'['+chars+']', '',my_str).replace(' ','_')
+
 logger = fl.function_logger(logging.DEBUG, logging.DEBUG, function_name='test_dag')
 
 def collect_clist_data():
+    '''docstring for collect_clist_data'''
     cl_h = CraigslistHousing(site='sfbay',
                              area='sfc',
                              filters={
@@ -53,21 +60,10 @@ def collect_clist_data():
 def main():
     '''docstring for main'''
     df = collect_clist_data()
-
-    # folder = 'results'
-    # try:    
-    #     os.mkdir(folder)
-    # except FileExistsError as e:
-    #     logger.warning(e)
-
     filename = today+'_clistings.csv'
-    # df.to_csv(folder+'/'+filename,index=False)
     keyname = "craigslist-tables/"+filename
     bucket = "project-rac"
-    # s3_funks.write_csv_to_s3(df, bucket, keyname, folder+'/'+filename)
     s3_funks.write_df_to_s3(df, bucket, keyname)
-    # s3_funks.write_pandas_parquet_to_s3(df, bucket, keyname, filename)
-    # df.to_parquet(folder+'/'+filename,index=False)
 
 if __name__ == '__main__':
     main()

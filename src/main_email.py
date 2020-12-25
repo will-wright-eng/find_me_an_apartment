@@ -8,7 +8,7 @@ email_config.py
 Author: William Wright
 '''
 
-import datetime as dt
+# import datetime as dt
 import smtplib
 
 from email.mime.base import MIMEBase
@@ -21,7 +21,6 @@ from module_email.email_configs import password, myemail, recipients
 
 def mail(subject, text, attach=None, email_to=None):
     '''docstring for mail'''
-    
     gmail_user = myemail
     gmail_pwd = password
 
@@ -31,7 +30,6 @@ def mail(subject, text, attach=None, email_to=None):
     msg = MIMEMultipart()
     msg['From'] = gmail_user
     msg['To'] = gmail_user
-    # msg['To'] = ", ".join(recipients)
     msg['Subject'] = subject
     msg.attach(MIMEText(text))
     
@@ -53,11 +51,11 @@ def mail(subject, text, attach=None, email_to=None):
     return mailServer.close()
 
 def main():
-    '''docstring for main'''
-    today = str(dt.date.today())
+    '''docstring for main
     # to = recipients
     # attach = search_result_filenames
-    subject = today + " Craigslist Test DAG"
+    '''
+    subject = "Project RAC - DAG Executed"
     text = '''\nbody of email message\nby willcasswrig'''
     mail(subject, text)
 

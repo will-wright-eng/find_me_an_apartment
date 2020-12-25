@@ -22,9 +22,8 @@ default_args = {
 dag = DAG(
     'dag_clist',
     default_args=default_args,
-    description='dag for executing main.py which grabs craigslist \
-        rental listings',
-    schedule_interval='0 18 * * *',
+    description='grabs craigslist rental listings',
+    schedule_interval='0 */12 * * *',
     start_date=days_ago(1)
 )
 
@@ -51,7 +50,7 @@ start_dag.doc_md = """\
 You can document your task using the attributes `doc_md` (markdown),
 `doc` (plain text), `doc_rst`, `doc_json`, `doc_yaml` which gets
 rendered in the UI's Task Instance Details page.
-![img](http://montcs.bloomu.edu/~bobmon/Semesters/2012-01/491/import%20soul.png)
+![img]()
 """
 
 start_dag >> clist >> email
