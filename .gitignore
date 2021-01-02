@@ -3,7 +3,7 @@
 *.gz
 *.log
 *.zip
-scp*
+
 
 *.ipynb_checkpoints
 *.ipynb
@@ -17,4 +17,6 @@ notes*
 *configs.py
 
 project_dev/
-src/results/
+
+scp_zip.sh
+pi_files.sh
