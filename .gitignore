@@ -16,7 +16,7 @@ tmp*
 notes*
 *config.py
 *configs.py
-agg_analysis/myconfigs.py
+*/myconfigs.py
 
 project_dev/
 
