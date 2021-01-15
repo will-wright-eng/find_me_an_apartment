@@ -22,7 +22,7 @@ today = re.sub(r'[' + chars + ']', '', my_str).replace(' ', '_')
 
 logger = fl.function_logger(logging.DEBUG,
                             logging.DEBUG,
-                            function_name='test_dag')
+                            function_name='main_clist')
 
 
 def collect_clist_data():
