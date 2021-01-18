@@ -32,12 +32,12 @@ def main():
         
     ndf = pd.concat(dfs)
     # combine with historical data -- TODO add this csv to bucket
-    filename = myconfigs.filename
-    df = pd.read_csv(filename)
-    print(df.shape)
-    print(ndf.shape)
-    ndf = pd.concat([ndf,df])
-    print(ndf.shape)
+    # filename = myconfigs.filename
+    # df = pd.read_csv(filename)
+    # print(df.shape)
+    # print(ndf.shape)
+    # ndf = pd.concat([ndf,df])
+    # print(ndf.shape)
 
     ndf.price = ndf.price.apply(lambda ele: float(ele.replace('$','').replace(',','')))
     ndf['where'] = ndf['where'].apply(lambda ele: str(ele).replace(',',''))
