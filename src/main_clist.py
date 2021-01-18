@@ -33,7 +33,7 @@ def collect_clist_data():
                                  'min_price': 1000,
                                  'max_price': 6000,
                                  'search_distance': 4,
-                                 'zip_code': 94133,
+                                 'zip_code': 94115,
                                  'posted_today': True
                              })
 
