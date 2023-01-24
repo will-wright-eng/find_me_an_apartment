@@ -1,0 +1,32 @@
+name: find_me_apartment test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  run-tests:
+    defaults:
+      run:
+        shell: bash -l {0}  
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the code then
+        uses: actions/checkout@v3
+
+      - name: Conda and install
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: apartmenttest
+          environment-file: ./environment.yml
+          python-version: 3.8
+          auto-activate-base: false
+          auto-update-conda: true    
+      - name: test the code
+        run: |
+          pytest .
