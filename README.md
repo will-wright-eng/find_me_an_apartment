@@ -65,7 +65,7 @@ It appears as though listings -- given my search parameters and filtering for th
 ## To Do
 ### Need
 - obligatory blog post of project
-- add CI (Travis or Jenkins)
+- add CI (Travis or Jenkins) -- DONE
 - ~~aggregate analysis/report~~
 - conditional dag for daily and aggregate (every 2 weeks) reports
 - move py configs to cfg file at the repo level
