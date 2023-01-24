@@ -1,0 +1,13 @@
+name: find_me_an_apartment
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.8
+  - pip
+  - pytest
+  - boto3
+  - pandas
+  - airflow
+  - pip:
+      - secure-smtplib
+      - python-craigslist
