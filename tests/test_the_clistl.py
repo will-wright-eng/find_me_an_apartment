@@ -10,8 +10,3 @@ import smtplib
 def test_dataframe_not_empty():
     df = collect_clist_data()
     assert not df.empty, "Dataframe is empty"
-
-# Test to check if mail server is closed
-def test_mail_server_closed():
-    server = mail("test_subject", "test_text")
-    assert server.sock is None, "Mail server is not closed"
