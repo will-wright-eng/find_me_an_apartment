@@ -1,3 +1,6 @@
+import sys
+sys.path.append('./src/')
+
 from main_email import mail
 from main_clist import collect_clist_data
 import pandas as pd
